@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="fragment">
+        HourForecastFragment.newInstance(),
+        DayForecastFragment.newInstance()
+    </array>
+    <array name="fragmentTitle">
+        "Hour",
+        "Day"
+    </array>
+</resources>
