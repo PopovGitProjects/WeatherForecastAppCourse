@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import com.example.weatherforecastappcourse.R
+import androidx.fragment.app.FragmentActivity
 import com.example.weatherforecastappcourse.adapters.ViewPagerAdapter
 import com.example.weatherforecastappcourse.databinding.FragmentMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -40,10 +40,14 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkPermission()
-        val adapter = ViewPagerAdapter(this, fragmentList)
-        binding.viewPager2.adapter = adapter
-        TabLayoutMediator(binding.tabLayout, binding.viewPager2){
-            tab, pos -> tab.text = fragmentTitleList[pos]
+        init()
+
+    }
+    private fun init() = with(binding){
+        val adapter = ViewPagerAdapter(activity as FragmentActivity, fragmentList)
+        viewPager2.adapter = adapter
+        TabLayoutMediator(tabLayout, viewPager2){
+                tab, pos -> tab.text = fragmentTitleList[pos]
 
         }.attach()
     }
