@@ -1,4 +1,4 @@
-package com.example.weatherforecastappcourse.fragments
+package com.example.weatherforecastappcourse.models.viewmodels
 
 import androidx.lifecycle.ViewModel
 

@@ -6,7 +6,9 @@
     android:layout_margin="2dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:backgroundTint="@color/cardview_bg"
-    app:cardCornerRadius="5dp">
+    app:cardCornerRadius="5dp"
+    app:cardElevation="8dp"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,6 +32,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="3dp"
             android:fontFamily="@font/abeezee"
+            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tv_item_time_date"
             app:layout_constraintStart_toStartOf="@+id/tv_item_time_date"
