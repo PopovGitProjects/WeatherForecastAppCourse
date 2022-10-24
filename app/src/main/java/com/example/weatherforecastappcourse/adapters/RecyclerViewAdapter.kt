@@ -10,8 +10,7 @@ import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.ForecastItemBinding
 import com.example.weatherforecastappcourse.models.WeatherModel
 
-class RecyclerViewAdapter(dataSet: ArrayList<WeatherModel>, typeWeatherData: String): ListAdapter<WeatherModel, RecyclerViewAdapter.Holder>(Comporator()){
-    private val aDataSet = arrayListOf<WeatherModel>()
+class RecyclerViewAdapter(typeWeatherData: String): ListAdapter<WeatherModel, RecyclerViewAdapter.Holder>(Comparator()){
     private val aTypeWeatherData = typeWeatherData
 
     class Holder(private val binding: ForecastItemBinding, aTypeWeatherData: String): RecyclerView.ViewHolder(binding.root) {
@@ -31,7 +30,7 @@ class RecyclerViewAdapter(dataSet: ArrayList<WeatherModel>, typeWeatherData: Str
             }
         }
     }
-    class Comporator: DiffUtil.ItemCallback<WeatherModel>(){
+    class Comparator: DiffUtil.ItemCallback<WeatherModel>(){
         override fun areItemsTheSame(oldItem: WeatherModel, newItem: WeatherModel): Boolean {
             return oldItem == newItem
         }

@@ -1,33 +1,54 @@
 package com.example.weatherforecastappcourse.fragments
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.weatherforecastappcourse.R
-import com.example.weatherforecastappcourse.models.viewmodels.DayForecastViewModel
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weatherforecastappcourse.adapters.RecyclerViewAdapter
+import com.example.weatherforecastappcourse.constants.Const
+import com.example.weatherforecastappcourse.databinding.FragmentDayForecastBinding
+import com.example.weatherforecastappcourse.models.WeatherModel
 
 class DayForecastFragment : Fragment() {
+
+    private var _binding: FragmentDayForecastBinding? = null
+    private val binding get() = _binding!!
+    private var adapter: RecyclerViewAdapter? = null
+
+    private val dataSet = arrayListOf(
+        WeatherModel("", "25.07", "Sunny", "", "+25", "", "", ""),
+        WeatherModel("", "26.07", "Sunny", "", "+27", "", "", ""),
+        WeatherModel("", "27.07", "Sunny", "", "+32", "", "", "")
+    )
 
     companion object {
         fun newInstance() = DayForecastFragment()
     }
 
-    private lateinit var viewModel: DayForecastViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_day_forecast, container, false)
+    ): View {
+        _binding = FragmentDayForecastBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(DayForecastViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecyclerView()
     }
 
+    private fun initRecyclerView() = with(binding){
+        recyclerViewDay.layoutManager = LinearLayoutManager(activity)
+        adapter = RecyclerViewAdapter(Const.CURRENT)
+        recyclerViewDay.adapter = adapter
+        adapter!!.submitList(dataSet)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

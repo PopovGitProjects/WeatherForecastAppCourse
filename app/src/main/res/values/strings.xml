@@ -6,4 +6,6 @@
     <string name="search">Search</string>
     <string name="weather_image">Weather image</string>
     <string name="refresh">Refresh</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
 </resources>

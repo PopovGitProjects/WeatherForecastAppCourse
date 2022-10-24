@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.example.weatherforecastappcourse.RequestWeatherData
 import com.example.weatherforecastappcourse.adapters.ViewPagerAdapter
 import com.example.weatherforecastappcourse.databinding.FragmentMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -41,7 +42,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkPermission()
         init()
-
+        RequestWeatherData().requestWeatherData("Perm", requireContext())
     }
     private fun init() = with(binding){
         val adapter = ViewPagerAdapter(activity as FragmentActivity, fragmentList)
