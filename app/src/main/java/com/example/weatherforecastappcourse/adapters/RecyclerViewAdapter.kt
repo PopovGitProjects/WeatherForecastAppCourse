@@ -19,7 +19,7 @@ class RecyclerViewAdapter(typeWeatherData: String): ListAdapter<WeatherModel, Re
             tvItemTimeDate.text = item.time
             tvItemCondition.text = item.conditions
             when (vType){
-                Const.CURRENT -> {
+                Const.DAY -> {
                     tvItemTemp.text = item.dayTemp
                     imgItemWeather.setImageURI(Uri.parse(item.imageUrl))
                 }

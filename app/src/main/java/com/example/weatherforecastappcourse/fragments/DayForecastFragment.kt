@@ -42,7 +42,7 @@ class DayForecastFragment : Fragment() {
 
     private fun initRecyclerView() = with(binding){
         recyclerViewDay.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerViewAdapter(Const.CURRENT)
+        adapter = RecyclerViewAdapter(Const.DAY)
         recyclerViewDay.adapter = adapter
         adapter!!.submitList(dataSet)
     }
