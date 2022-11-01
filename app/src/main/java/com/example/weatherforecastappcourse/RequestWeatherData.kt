@@ -2,6 +2,7 @@ package com.example.weatherforecastappcourse
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -9,7 +10,7 @@ import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.models.WeatherModel
 import org.json.JSONObject
 
-class RequestWeatherData {
+class RequestWeatherData(private var currentItem: WeatherModel?) {
     fun requestWeatherData(city: String, context: Context){
         val url = Const.API_URL +
                 Const.API_KEY +
@@ -27,7 +28,11 @@ class RequestWeatherData {
                     result -> parseWeatherData(result)
             },
             {
-                    error -> Log.e("My", "Volley ERROR: $error")
+                    error ->
+                run {
+                    Log.e("My", "Volley ERROR: $error")
+                    Toast.makeText(context, "Internet is not connected!", Toast.LENGTH_SHORT).show()
+                }
             }
         )
         queue.add(request)
@@ -74,6 +79,6 @@ class RequestWeatherData {
                 .getString("icon"),
             weatherItem.hoursForecast
         )
-        Log.d("My","Hours forecast: ${item.hoursForecast}")
+        currentItem = item
     }
 }
