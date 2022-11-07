@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weatherforecastappcourse.Listener
 import com.example.weatherforecastappcourse.adapters.RecyclerViewAdapter
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentDayForecastBinding
 import com.example.weatherforecastappcourse.models.WeatherModel
 import com.example.weatherforecastappcourse.models.viewmodels.MainViewModel
 
-class DayForecastFragment : Fragment() {
+class DayForecastFragment : Fragment(), Listener {
 
     private var _binding: FragmentDayForecastBinding? = null
     private val binding get() = _binding!!
@@ -42,12 +43,16 @@ class DayForecastFragment : Fragment() {
 
     private fun initRecyclerView() = with(binding){
         recyclerViewDay.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerViewAdapter(Const.DAY)
+        adapter = RecyclerViewAdapter(this@DayForecastFragment, Const.DAY)
         recyclerViewDay.adapter = adapter
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onClick(item: WeatherModel) {
+        model.liveCurrentData.value = item
     }
 }

@@ -2,6 +2,8 @@ package com.example.weatherforecastappcourse.fragments
 
 import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
@@ -22,10 +25,16 @@ import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentMainBinding
 import com.example.weatherforecastappcourse.models.WeatherModel
 import com.example.weatherforecastappcourse.models.viewmodels.MainViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.tabs.TabLayoutMediator
 import org.json.JSONObject
 
 class MainFragment : Fragment() {
+
+    private var fLocationClient: FusedLocationProviderClient? = null
     private val fragmentList = listOf(
         HourForecastFragment.newInstance(),
         DayForecastFragment.newInstance()
@@ -53,12 +62,14 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkPermission()
         init()
-        requestWeatherData("Perm", requireContext())
+        getLocation()
         updateCurrentCard()
+        buttonClick()
     }
 
     private fun init() = with(binding){
         val adapter = ViewPagerAdapter(activity as FragmentActivity, fragmentList)
+        fLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         viewPager2.adapter = adapter
         TabLayoutMediator(tabLayout, viewPager2){
                 tab, pos -> tab.text = fragmentTitleList[pos]
@@ -66,16 +77,61 @@ class MainFragment : Fragment() {
         }.attach()
     }
 
+    private fun buttonClick() = with(binding){
+        btnRefresh.setOnClickListener {
+            tabLayout.selectTab(tabLayout.getTabAt(0))
+            getLocation()
+        }
+        btnSearch.setOnClickListener {
+
+        }
+    }
+
+    private fun isLocationEnabled(): Boolean{
+        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+
+
+    private fun getLocation(){
+        if (!isLocationEnabled()){
+            Toast.makeText(requireContext(), "GPS disabled", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val cancellationToken = CancellationTokenSource()
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fLocationClient?.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationToken.token)
+            ?.addOnCompleteListener {
+                requestWeatherData("${it.result.latitude}, ${it.result.longitude}"
+                    , requireContext())
+            }
+    }
+
     private fun updateCurrentCard() = with(binding){
         model.liveCurrentData.observe(viewLifecycleOwner){
             val maxMinTemp = "${it.dayTemp}\u00B0C / ${it.nightTemp}\u00B0C"
-            val currentTemp = "${it.currentTemp}\u00B0C"
+            val currentTemp = "${it.currentTemp.ifEmpty { 
+                maxMinTemp
+            }}°C"
             tvData.text = it.time
             imgWeather.load("https:" + it.imageUrl)
             tvCity.text = it.city
             tvCurrentTemp.text = currentTemp
             tvCondition.text = it.conditions
-            tvMaxMin.text = maxMinTemp
+            tvMaxMin.text = if (it.currentTemp.isEmpty()){
+                ""
+            }else{
+                maxMinTemp
+            }
         }
         Log.d("My", "${model.liveCurrentData.value}")
     }
@@ -140,8 +196,8 @@ class MainFragment : Fragment() {
                 day.getJSONObject("day").getJSONObject("condition")
                     .getString("text"),
                 "",
-                day.getJSONObject("day").getString("maxtemp_c"),
-                day.getJSONObject("day").getString("mintemp_c"),
+                day.getJSONObject("day").getString("maxtemp_c").toFloat().toInt().toString(),
+                day.getJSONObject("day").getString("mintemp_c").toFloat().toInt().toString(),
                 day.getJSONObject("day").getJSONObject("condition")
                     .getString("icon"),
                 day.getJSONArray("hour").toString()
@@ -178,5 +234,6 @@ class MainFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         _pLauncher = null
+        fLocationClient = null
     }
 }
