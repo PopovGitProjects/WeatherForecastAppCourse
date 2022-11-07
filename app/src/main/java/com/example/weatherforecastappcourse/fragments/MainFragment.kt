@@ -2,9 +2,11 @@ package com.example.weatherforecastappcourse.fragments
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,9 @@ import coil.load
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.weatherforecastappcourse.DialogManager
+import com.example.weatherforecastappcourse.OnClickDialogButtonListener
+import com.example.weatherforecastappcourse.TabLayoutSelectTab
 import com.example.weatherforecastappcourse.adapters.ViewPagerAdapter
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentMainBinding
@@ -32,9 +37,10 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.tabs.TabLayoutMediator
 import org.json.JSONObject
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab {
 
     private var fLocationClient: FusedLocationProviderClient? = null
+
     private val fragmentList = listOf(
         HourForecastFragment.newInstance(),
         DayForecastFragment.newInstance()
@@ -43,11 +49,13 @@ class MainFragment : Fragment() {
         "Hour",
         "Day"
     )
+
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     private var _pLauncher: ActivityResultLauncher<String>? = null
     private val pLauncher get() = _pLauncher!!
+
     private val model: MainViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -62,7 +70,6 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkPermission()
         init()
-        getLocation()
         updateCurrentCard()
         buttonClick()
     }
@@ -80,10 +87,16 @@ class MainFragment : Fragment() {
     private fun buttonClick() = with(binding){
         btnRefresh.setOnClickListener {
             tabLayout.selectTab(tabLayout.getTabAt(0))
-            getLocation()
+            checkLocation()
         }
         btnSearch.setOnClickListener {
-
+            DialogManager.searchByNameDialog(requireContext(), object : OnClickDialogButtonListener{
+                override fun onClickDialogButton(name: String?) {
+                    if (name != null) {
+                        requestWeatherData(name, requireContext())
+                    }
+                }
+            })
         }
     }
 
@@ -92,12 +105,20 @@ class MainFragment : Fragment() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
+    private fun checkLocation(){
+        if (isLocationEnabled()){
+            getLocation()
+        }else{
+            DialogManager.locationSettingDialog(requireContext(), object : OnClickDialogButtonListener{
+                override fun onClickDialogButton(name: String?) {
+                    startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                }
+
+            })
+        }
+    }
 
     private fun getLocation(){
-        if (!isLocationEnabled()){
-            Toast.makeText(requireContext(), "GPS disabled", Toast.LENGTH_SHORT).show()
-            return
-        }
         val cancellationToken = CancellationTokenSource()
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -119,9 +140,11 @@ class MainFragment : Fragment() {
     private fun updateCurrentCard() = with(binding){
         model.liveCurrentData.observe(viewLifecycleOwner){
             val maxMinTemp = "${it.dayTemp}\u00B0C / ${it.nightTemp}\u00B0C"
-            val currentTemp = "${it.currentTemp.ifEmpty { 
+            val currentTemp = if (it.currentTemp == ""){
                 maxMinTemp
-            }}°C"
+            }else{
+                "${it.currentTemp}°C"
+            }
             tvData.text = it.time
             imgWeather.load("https:" + it.imageUrl)
             tvCity.text = it.city
@@ -156,7 +179,7 @@ class MainFragment : Fragment() {
                 "&q=" +
                 city +
                 "&days=" +
-                "5" +
+                "3" +
                 "&aqi=no" +
                 "&alerts=no"
         val queue = Volley.newRequestQueue(context)
@@ -170,7 +193,7 @@ class MainFragment : Fragment() {
                     error ->
                 run {
                     Log.e("My", "Volley ERROR: $error")
-                    Toast.makeText(context, "Internet is not connected!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Weather data not received!", Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -230,10 +253,23 @@ class MainFragment : Fragment() {
             MainFragment()
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkLocation()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         _pLauncher = null
         fLocationClient = null
+    }
+
+
+    override fun onClickDialogButton(name: String?) {
+    }
+
+    override fun tabLayoutSelectTab() {
+        binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))//???????????
     }
 }
