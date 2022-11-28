@@ -1,4 +1,4 @@
-package com.example.weatherforecastappcourse.fragments
+package com.example.weatherforecastappcourse.presentation.fragments
 
 import android.Manifest
 import android.content.Context
@@ -22,14 +22,14 @@ import coil.load
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.weatherforecastappcourse.DialogManager
-import com.example.weatherforecastappcourse.OnClickDialogButtonListener
-import com.example.weatherforecastappcourse.TabLayoutSelectTab
-import com.example.weatherforecastappcourse.adapters.ViewPagerAdapter
+import com.example.weatherforecastappcourse.presentation.dialog.DialogManager
+import com.example.weatherforecastappcourse.presentation.interfaces.OnClickDialogButtonListener
+import com.example.weatherforecastappcourse.presentation.interfaces.TabLayoutSelectTab
+import com.example.weatherforecastappcourse.presentation.adapters.ViewPagerAdapter
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentMainBinding
-import com.example.weatherforecastappcourse.models.WeatherModel
-import com.example.weatherforecastappcourse.models.viewmodels.MainViewModel
+import com.example.weatherforecastappcourse.domain.models.WeatherDataModel
+import com.example.weatherforecastappcourse.viewmodels.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -76,7 +76,7 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
 
     private fun init() = with(binding){
         val adapter = ViewPagerAdapter(activity as FragmentActivity, fragmentList)
-        fLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())// убрать отсюда!
         viewPager2.adapter = adapter
         TabLayoutMediator(tabLayout, viewPager2){
                 tab, pos -> tab.text = fragmentTitleList[pos]
@@ -90,7 +90,8 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
             checkLocation()
         }
         btnSearch.setOnClickListener {
-            DialogManager.searchByNameDialog(requireContext(), object : OnClickDialogButtonListener{
+            DialogManager.searchByNameDialog(requireContext(), object :
+                OnClickDialogButtonListener {
                 override fun onClickDialogButton(name: String?) {
                     if (name != null) {
                         requestWeatherData(name, requireContext())
@@ -99,7 +100,7 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
             })
         }
     }
-
+    // геолокация убрать!
     private fun isLocationEnabled(): Boolean{
         val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -109,7 +110,8 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         if (isLocationEnabled()){
             getLocation()
         }else{
-            DialogManager.locationSettingDialog(requireContext(), object : OnClickDialogButtonListener{
+            DialogManager.locationSettingDialog(requireContext(), object :
+                OnClickDialogButtonListener {
                 override fun onClickDialogButton(name: String?) {
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                 }
@@ -136,10 +138,10 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
                     , requireContext())
             }
     }
-
+    // работа с сетью убрать
     private fun updateCurrentCard() = with(binding){
         model.liveCurrentData.observe(viewLifecycleOwner){
-            val maxMinTemp = "${it.dayTemp}\u00B0C / ${it.nightTemp}\u00B0C"
+            val maxMinTemp = "${it.maxTemp}\u00B0C / ${it.minTemp}\u00B0C"
             val currentTemp = if (it.currentTemp == ""){
                 maxMinTemp
             }else{
@@ -158,7 +160,7 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         }
         Log.d("My", "${model.liveCurrentData.value}")
     }
-
+    // пермишны
     private fun permissionListener(){
         _pLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
             Toast.makeText(activity, "Permission is $it", Toast.LENGTH_SHORT)
@@ -172,7 +174,7 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
             pLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
-
+    // работа с сетью убрать
     private fun requestWeatherData(city: String, context: Context){
         val url = Const.API_URL +
                 Const.API_KEY +
@@ -206,14 +208,14 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         parseCurrentWeatherData(mainObject, list[0])
     }
 
-    private fun parseDaysWeatherData(mainObject: JSONObject): List<WeatherModel>{
-        val list = ArrayList<WeatherModel>()
+    private fun parseDaysWeatherData(mainObject: JSONObject): List<WeatherDataModel>{
+        val list = ArrayList<WeatherDataModel>()
         val name = mainObject.getJSONObject("location").getString("name")
         val daysForecastArray = mainObject.getJSONObject("forecast")
             .getJSONArray("forecastday")
         for (i in 0 until daysForecastArray.length()){
             val day = daysForecastArray[i] as JSONObject
-            val item = WeatherModel(
+            val item = WeatherDataModel(
                 name,
                 day.getString("date"),
                 day.getJSONObject("day").getJSONObject("condition")
@@ -231,15 +233,15 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         return list
     }
 
-    private fun parseCurrentWeatherData(mainObject: JSONObject, weatherItem: WeatherModel){
-        val item = WeatherModel(
+    private fun parseCurrentWeatherData(mainObject: JSONObject, weatherItem: WeatherDataModel){
+        val item = WeatherDataModel(
             mainObject.getJSONObject("location").getString("name"),
             mainObject.getJSONObject("current").getString("last_updated"),
             mainObject.getJSONObject("current").getJSONObject("condition")
                 .getString("text"),
             mainObject.getJSONObject("current").getString("temp_c"),
-            weatherItem.dayTemp,
-            weatherItem.nightTemp,
+            weatherItem.maxTemp,
+            weatherItem.minTemp,
             mainObject.getJSONObject("current").getJSONObject("condition")
                 .getString("icon"),
             weatherItem.hoursForecast

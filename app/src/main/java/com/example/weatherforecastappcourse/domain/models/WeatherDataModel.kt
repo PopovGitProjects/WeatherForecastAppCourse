@@ -1,12 +1,12 @@
-package com.example.weatherforecastappcourse.models
+package com.example.weatherforecastappcourse.domain.models
 
-data class WeatherModel(
+data class WeatherDataModel(
     val city: String,
     val time: String,
     val conditions: String,
     val currentTemp: String,
-    val dayTemp: String,
-    val nightTemp: String,
+    val maxTemp: String,
+    val minTemp: String,
     val imageUrl: String,
     val hoursForecast: String
 )

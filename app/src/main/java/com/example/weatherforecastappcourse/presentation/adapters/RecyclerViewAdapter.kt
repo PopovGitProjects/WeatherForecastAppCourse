@@ -1,4 +1,4 @@
-package com.example.weatherforecastappcourse.adapters
+package com.example.weatherforecastappcourse.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,17 +6,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.weatherforecastappcourse.OnClickItemListener
-import com.example.weatherforecastappcourse.TabLayoutSelectTab
+import com.example.weatherforecastappcourse.presentation.interfaces.OnClickItemListener
+import com.example.weatherforecastappcourse.presentation.interfaces.TabLayoutSelectTab
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.ForecastItemBinding
-import com.example.weatherforecastappcourse.models.WeatherModel
+import com.example.weatherforecastappcourse.domain.models.WeatherDataModel
 
 class RecyclerViewAdapter(
-        private val itemListener: OnClickItemListener?,
-        private val tabLayoutListener: TabLayoutSelectTab?,
-        typeWeatherData: String
-    ) : ListAdapter<WeatherModel, RecyclerViewAdapter.Holder>(Comparator()) {
+    private val itemListener: OnClickItemListener?,
+    private val tabLayoutListener: TabLayoutSelectTab?,
+    typeWeatherData: String
+    ) : ListAdapter<WeatherDataModel, RecyclerViewAdapter.Holder>(Comparator()) {
     private val aTypeWeatherData = typeWeatherData
 
     class Holder(
@@ -26,7 +26,7 @@ class RecyclerViewAdapter(
         private val tabLayoutListener: TabLayoutSelectTab?
     ) : RecyclerView.ViewHolder(binding.root) {
         private val vType = aTypeWeatherData
-        private var itemTemp: WeatherModel? = null
+        private var itemTemp: WeatherDataModel? = null
 
         init {
             itemView.setOnClickListener {
@@ -35,14 +35,14 @@ class RecyclerViewAdapter(
             }
         }
 
-        fun bind(item: WeatherModel) = with(binding) {
+        fun bind(item: WeatherDataModel) = with(binding) {
             itemTemp = item
             tvItemTimeDate.text = item.time
             tvItemCondition.text = item.conditions
             when (vType) {
                 Const.DAY -> {
                     tvItemTemp.text = item.currentTemp.ifEmpty {
-                        "${item.dayTemp}°C / ${item.nightTemp}°C"
+                        "${item.maxTemp}°C / ${item.minTemp}°C"
                     }
                     imgItemWeather.load("https:" + item.imageUrl)
                 }
@@ -56,12 +56,12 @@ class RecyclerViewAdapter(
         }
     }
 
-    class Comparator : DiffUtil.ItemCallback<WeatherModel>() {
-        override fun areItemsTheSame(oldItem: WeatherModel, newItem: WeatherModel): Boolean {
+    class Comparator : DiffUtil.ItemCallback<WeatherDataModel>() {
+        override fun areItemsTheSame(oldItem: WeatherDataModel, newItem: WeatherDataModel): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: WeatherModel, newItem: WeatherModel): Boolean {
+        override fun areContentsTheSame(oldItem: WeatherDataModel, newItem: WeatherDataModel): Boolean {
             return oldItem == newItem
         }
 

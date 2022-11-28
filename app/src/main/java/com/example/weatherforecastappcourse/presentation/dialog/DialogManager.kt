@@ -1,9 +1,8 @@
-package com.example.weatherforecastappcourse
+package com.example.weatherforecastappcourse.presentation.dialog
 
 import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
-import android.widget.EditText
+import com.example.weatherforecastappcourse.presentation.interfaces.OnClickDialogButtonListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 

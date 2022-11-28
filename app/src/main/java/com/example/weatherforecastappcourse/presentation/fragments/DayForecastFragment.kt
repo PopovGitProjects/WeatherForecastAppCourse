@@ -1,4 +1,4 @@
-package com.example.weatherforecastappcourse.fragments
+package com.example.weatherforecastappcourse.presentation.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherforecastappcourse.OnClickItemListener
-import com.example.weatherforecastappcourse.adapters.RecyclerViewAdapter
+import com.example.weatherforecastappcourse.presentation.interfaces.OnClickItemListener
+import com.example.weatherforecastappcourse.presentation.adapters.RecyclerViewAdapter
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentDayForecastBinding
-import com.example.weatherforecastappcourse.models.WeatherModel
-import com.example.weatherforecastappcourse.models.viewmodels.MainViewModel
+import com.example.weatherforecastappcourse.domain.models.WeatherDataModel
+import com.example.weatherforecastappcourse.viewmodels.MainViewModel
 
 class DayForecastFragment : Fragment(), OnClickItemListener {
 
@@ -52,7 +52,7 @@ class DayForecastFragment : Fragment(), OnClickItemListener {
         _binding = null
     }
 
-    override fun onClickItem(item: WeatherModel) {
+    override fun onClickItem(item: WeatherDataModel) {
         model.liveCurrentData.value = item
     }
 }

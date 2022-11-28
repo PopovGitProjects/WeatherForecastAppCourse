@@ -1,20 +1,12 @@
-package com.example.weatherforecastappcourse.models.viewmodels
+package com.example.weatherforecastappcourse.viewmodels
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.example.weatherforecastappcourse.constants.Const
-import com.example.weatherforecastappcourse.models.WeatherModel
-import org.json.JSONObject
+import com.example.weatherforecastappcourse.domain.models.WeatherDataModel
 
 class MainViewModel: ViewModel() {
-    val liveCurrentData = MutableLiveData<WeatherModel>()
-    val livesDayList = MutableLiveData<List<WeatherModel>>()
+    val liveCurrentData = MutableLiveData<WeatherDataModel>()
+    val livesDayList = MutableLiveData<List<WeatherDataModel>>()
 
 //    fun requestWeatherData(city: String, context: Context) {
 //        val url = Const.API_URL +
