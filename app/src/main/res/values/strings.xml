@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WeatherForecastAppCourse</string>
+    <string name="app_name">Weather Forecast</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="background">Background</string>
@@ -8,4 +8,14 @@
     <string name="refresh">Refresh</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
+    <string name="settings">Settings</string>
+    <string name="converter">Converter</string>
+    <string name="wind_speed_in_km_h">Wind speed in km/h</string>
+    <string name="wind_speed_in_m_c">Wind speed in m/c</string>
+    <string name="pressure_in_mm">Pressure in mm</string>
+    <string name="pressure_in_kpa">Pressure in kPa</string>
+    <string name="equals" translatable="false">=</string>
+    <string name="mm_hg" translatable="false">mmHg</string>
+    <string name="pa" translatable="false">kPa</string>
+    <string name="translate_button">Translate</string>
 </resources>
