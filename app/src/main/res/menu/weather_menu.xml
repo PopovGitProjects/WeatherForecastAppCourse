@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Settings" >
+        <menu >
+            <item
+                android:id="@+id/wind_switch"
+                android:title="Wind speed m/s"
+                app:actionLayout="@layout/switch_item"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/press_switchswitch"
+                android:title="Pressures in kPa"
+                app:actionLayout="@layout/switch_item"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+    <item android:title="Converter" />
+</menu>

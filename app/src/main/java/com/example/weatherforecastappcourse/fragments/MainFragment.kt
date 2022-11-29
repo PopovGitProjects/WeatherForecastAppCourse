@@ -8,9 +8,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,6 +22,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.weatherforecastappcourse.DialogManager
 import com.example.weatherforecastappcourse.OnClickDialogButtonListener
+import com.example.weatherforecastappcourse.R
 import com.example.weatherforecastappcourse.TabLayoutSelectTab
 import com.example.weatherforecastappcourse.adapters.ViewPagerAdapter
 import com.example.weatherforecastappcourse.constants.Const
@@ -132,8 +131,12 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         }
         fLocationClient?.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationToken.token)
             ?.addOnCompleteListener {
-                requestWeatherData("${it.result.latitude}, ${it.result.longitude}"
-                    , requireContext())
+                if (it.result.latitude != null && it.result.longitude != null){
+                    requestWeatherData("${it.result.latitude}, ${it.result.longitude}"
+                        , requireContext())
+                }else{
+                    requestWeatherData("Moscow", requireContext())
+                }
             }
     }
 
