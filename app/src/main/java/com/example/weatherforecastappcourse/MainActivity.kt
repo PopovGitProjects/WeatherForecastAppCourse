@@ -5,7 +5,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.weatherforecastappcourse.domain.SharedPreference
 import com.example.weatherforecastappcourse.fragments.MainFragment
+import com.example.weatherforecastappcourse.models.Settings
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,12 +32,23 @@ class MainActivity : AppCompatActivity() {
                     .addToBackStack("key")
                     .commit()
                 Toast.makeText(this, "Button click!", Toast.LENGTH_SHORT).show()
+                return true
             }
             R.id.wind -> {
-
+                item.isChecked = true
+                if (item.isChecked){
+                    SharedPreference(this).saveSet(Settings(pressure = "", wind = "ms"))
+                }
+                Toast.makeText(this, "Button click!", Toast.LENGTH_SHORT).show()
+                return true
             }
             R.id.press -> {
-
+                item.isChecked = true
+                if (item.isChecked){
+                    SharedPreference(this).saveSet(Settings(pressure = "mm", wind = ""))
+                }
+                Toast.makeText(this, "Button click!", Toast.LENGTH_SHORT).show()
+                return true
             }
         }
         return true

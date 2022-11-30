@@ -3,7 +3,7 @@ package com.example.weatherforecastappcourse.domain
 import android.widget.EditText
 import kotlin.math.roundToInt
 
-class Calc {
+class CalcPress {
     fun calculatePressure(editText: EditText, constant: Double):String{
         val pressure = editText.text.toString().toDouble()
         return decimalRound(pressure * constant).toString()

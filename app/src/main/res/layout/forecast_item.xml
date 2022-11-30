@@ -29,35 +29,70 @@
             android:id="@+id/tv_item_condition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/abeezee"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_item_time_date"
-            app:layout_constraintTop_toBottomOf="@+id/tv_item_time_date"
             tools:text="Sunny" />
 
         <TextView
             android:id="@+id/tv_item_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/abeezee"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/img_item_weather"
-            app:layout_constraintStart_toEndOf="@+id/tv_item_time_date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="25\u00B0C" />
+            tools:text="Temperature: 25\u00B0C" />
+
+        <TextView
+            android:id="@+id/tv_item_press"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/abeezee"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_item_temp"
+            app:layout_constraintStart_toStartOf="@+id/tv_item_temp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_temp"
+            tools:text="Pressure: 1023.0 hPa" />
+
+        <TextView
+            android:id="@+id/tv_item_wind_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/abeezee"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_item_press"
+            app:layout_constraintStart_toStartOf="@+id/tv_item_press"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_press"
+            tools:text="Wind speed: 2.9 kmh" />
+
+        <TextView
+            android:id="@+id/tv_item_wind_dir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/abeezee"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_item_condition"
+            app:layout_constraintEnd_toEndOf="@+id/tv_item_wind_speed"
+            app:layout_constraintStart_toStartOf="@+id/tv_item_wind_speed"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_wind_speed"
+            tools:text="Wind direction: ENE" />
 
         <ImageView
             android:id="@+id/img_item_weather"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/weather_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_launcher_foreground"
-            android:contentDescription="@string/weather_image" />
+            app:srcCompat="@drawable/ic_launcher_foreground" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

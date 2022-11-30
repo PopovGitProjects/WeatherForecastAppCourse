@@ -25,6 +25,7 @@
         android:id="@+id/recyclerViewHour"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/forecast_item"
-        />
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="-206dp"
+        tools:listitem="@layout/forecast_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

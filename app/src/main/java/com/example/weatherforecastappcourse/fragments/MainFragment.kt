@@ -8,7 +8,9 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +29,8 @@ import com.example.weatherforecastappcourse.TabLayoutSelectTab
 import com.example.weatherforecastappcourse.adapters.ViewPagerAdapter
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentMainBinding
+import com.example.weatherforecastappcourse.domain.ConvertWeatherParam
+import com.example.weatherforecastappcourse.domain.SharedPreference
 import com.example.weatherforecastappcourse.models.WeatherModel
 import com.example.weatherforecastappcourse.models.viewmodels.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -34,6 +38,10 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab {
@@ -87,6 +95,11 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         btnRefresh.setOnClickListener {
             tabLayout.selectTab(tabLayout.getTabAt(0))
             checkLocation()
+            refreshProgressBar.visibility = View.VISIBLE
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(3000)
+                refreshProgressBar.visibility = View.GONE
+            }
         }
         btnSearch.setOnClickListener {
             DialogManager.searchByNameDialog(requireContext(), object : OnClickDialogButtonListener{
@@ -131,7 +144,7 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         }
         fLocationClient?.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationToken.token)
             ?.addOnCompleteListener {
-                if (it.result.latitude != null && it.result.longitude != null){
+                if (it.result.latitude.toString() != "" && it.result.longitude.toString() != ""){
                     requestWeatherData("${it.result.latitude}, ${it.result.longitude}"
                         , requireContext())
                 }else{
@@ -141,17 +154,33 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
     }
 
     private fun updateCurrentCard() = with(binding){
+        val text = resources.getText(R.string.app_name).toString()
+        val sharedPref = SharedPreference(requireContext())
         model.liveCurrentData.observe(viewLifecycleOwner){
             val maxMinTemp = "${it.dayTemp}\u00B0C / ${it.nightTemp}\u00B0C"
             val currentTemp = if (it.currentTemp == ""){
                 maxMinTemp
             }else{
-                "${it.currentTemp}°C"
+                "Temperature: ${it.currentTemp}°C"
             }
             tvData.text = it.time
             imgWeather.load("https:" + it.imageUrl)
             tvCity.text = it.city
             tvCurrentTemp.text = currentTemp
+            val press = if (sharedPref.getSet().pressure == "mm") {
+                "Pressure: ${ConvertWeatherParam().convertPress(it.pressure)}"
+            }else{
+                "Pressure: ${it.pressure}"
+            }
+            tvPressure.text = press
+            val windDir = "Wind direction: ${it.wind_dir}"
+            tvWindDir.text = windDir
+            val windSpeed = if (sharedPref.getSet().wind == "ms"){
+                "Wind speed: ${ConvertWeatherParam().convertWind(it.wind_kph)} ms"
+            }else{
+                "Wind speed: ${it.wind_kph} kph $text"
+            }
+            tvWindSpeed.text = windSpeed
             tvCondition.text = it.conditions
             tvMaxMin.text = if (it.currentTemp.isEmpty()){
                 ""
@@ -224,6 +253,9 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
                 "",
                 day.getJSONObject("day").getString("maxtemp_c").toFloat().toInt().toString(),
                 day.getJSONObject("day").getString("mintemp_c").toFloat().toInt().toString(),
+                "",
+                "",
+                "",
                 day.getJSONObject("day").getJSONObject("condition")
                     .getString("icon"),
                 day.getJSONArray("hour").toString()
@@ -243,6 +275,9 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
             mainObject.getJSONObject("current").getString("temp_c"),
             weatherItem.dayTemp,
             weatherItem.nightTemp,
+            mainObject.getJSONObject("current").getString("pressure_mb"),
+            mainObject.getJSONObject("current").getString("wind_dir"),
+            mainObject.getJSONObject("current").getString("wind_kph"),
             mainObject.getJSONObject("current").getJSONObject("condition")
                 .getString("icon"),
             weatherItem.hoursForecast

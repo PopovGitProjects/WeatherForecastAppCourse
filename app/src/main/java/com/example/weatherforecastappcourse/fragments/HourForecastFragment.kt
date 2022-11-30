@@ -61,9 +61,14 @@ class HourForecastFragment : Fragment() {
                 (hoursArray[i] as JSONObject).getString("temp_c"),
                 "",
                 "",
+                (hoursArray[i] as JSONObject).getString("pressure_mb"),
+                (hoursArray[i] as JSONObject).getString("wind_dir"),
+                (hoursArray[i] as JSONObject).getString("wind_kph"),
                 (hoursArray[i] as JSONObject).getJSONObject("condition")
                     .getString("icon"),
                 ""
+
+
             )
             list.add(item)
         }

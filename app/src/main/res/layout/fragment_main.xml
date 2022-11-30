@@ -20,6 +20,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ImageContrastCheck" />
 
+    <ProgressBar
+        android:id="@+id/refreshProgressBar"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:elevation="3dp"
+        android:indeterminateTint="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
@@ -151,7 +164,7 @@
                 tools:text="Pressure: 1120 hPa" />
 
             <TextView
-                android:id="@+id/tvWind"
+                android:id="@+id/tvWindDir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -165,10 +178,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/tvWind"
+                app:layout_constraintEnd_toEndOf="@+id/tvWindDir"
                 app:layout_constraintHorizontal_bias="0.526"
-                app:layout_constraintStart_toStartOf="@+id/tvWind"
-                app:layout_constraintTop_toBottomOf="@+id/tvWind"
+                app:layout_constraintStart_toStartOf="@+id/tvWindDir"
+                app:layout_constraintTop_toBottomOf="@+id/tvWindDir"
                 tools:text="Wind speed: 8 km/h" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

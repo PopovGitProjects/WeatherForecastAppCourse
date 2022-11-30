@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentConverterBinding
-import com.example.weatherforecastappcourse.databinding.FragmentMainBinding
-import com.example.weatherforecastappcourse.domain.Calc
+import com.example.weatherforecastappcourse.domain.CalcPress
 
 
 class ConverterFragment : Fragment() {
@@ -34,12 +33,12 @@ class ConverterFragment : Fragment() {
             translateButton.setOnClickListener{
                 if (!editTextLeft.text.isNullOrEmpty() && editTextLeft.isFocused){
                     editTextRight.setText(
-                        Calc()
+                        CalcPress()
                         .calculatePressure(editTextLeft, Const.MMHG_CONST))
                 }
                 if (!editTextRight.text.isNullOrEmpty() && editTextRight.isFocused){
                     editTextLeft.setText(
-                        Calc()
+                        CalcPress()
                         .calculatePressure(editTextRight, Const.PA_CONST))
                 }
             }
