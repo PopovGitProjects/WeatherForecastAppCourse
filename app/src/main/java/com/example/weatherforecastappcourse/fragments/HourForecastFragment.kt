@@ -45,7 +45,7 @@ class HourForecastFragment : Fragment() {
 
     private fun initRecyclerView() = with(binding){
         recyclerViewHour.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerViewAdapter(null, null, Const.HOUR)
+        adapter = RecyclerViewAdapter(null, null, Const.HOUR, requireContext())
         recyclerViewHour.adapter = adapter
     }
 

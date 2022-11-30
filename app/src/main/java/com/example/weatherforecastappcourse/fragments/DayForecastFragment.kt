@@ -43,7 +43,12 @@ class DayForecastFragment : Fragment(), OnClickItemListener {
 
     private fun initRecyclerView() = with(binding){
         recyclerViewDay.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerViewAdapter(this@DayForecastFragment, null, Const.DAY)
+        adapter = RecyclerViewAdapter(
+            this@DayForecastFragment,
+            null,
+            Const.DAY,
+            requireContext()
+        )
         recyclerViewDay.adapter = adapter
     }
 

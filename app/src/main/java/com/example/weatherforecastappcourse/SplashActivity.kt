@@ -28,4 +28,9 @@ private lateinit var binding: ActivitySplashBinding
         }
 
     }
+
+    override fun onRestart() {
+        super.onRestart()
+        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+    }
 }

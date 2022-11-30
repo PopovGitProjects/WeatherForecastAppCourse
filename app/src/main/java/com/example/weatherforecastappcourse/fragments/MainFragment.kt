@@ -29,6 +29,7 @@ import com.example.weatherforecastappcourse.TabLayoutSelectTab
 import com.example.weatherforecastappcourse.adapters.ViewPagerAdapter
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentMainBinding
+import com.example.weatherforecastappcourse.domain.Concat
 import com.example.weatherforecastappcourse.domain.ConvertWeatherParam
 import com.example.weatherforecastappcourse.domain.SharedPreference
 import com.example.weatherforecastappcourse.models.WeatherModel
@@ -94,10 +95,10 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
     private fun buttonClick() = with(binding){
         btnRefresh.setOnClickListener {
             tabLayout.selectTab(tabLayout.getTabAt(0))
-            checkLocation()
             refreshProgressBar.visibility = View.VISIBLE
-            CoroutineScope(Dispatchers.IO).launch {
-                delay(3000)
+            CoroutineScope(Dispatchers.Main).launch {
+                checkLocation()
+                delay(1000)
                 refreshProgressBar.visibility = View.GONE
             }
         }
@@ -154,33 +155,63 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
     }
 
     private fun updateCurrentCard() = with(binding){
-        val text = resources.getText(R.string.app_name).toString()
+        val concat = Concat()
+        val convert = ConvertWeatherParam()
+        val pressNameSt = resources.getText(R.string.pressName).toString()
+        val windDirSt = resources.getText(R.string.windDir).toString()
+        val windSpeedSt = resources.getText(R.string.windSpeed).toString()
+        val kmhSt = resources.getText(R.string.kmh).toString()
+        val msSt = resources.getText(R.string.ms).toString()
+        val hPaSt = resources.getText(R.string.hPa).toString()
+        val mmHgSt = resources.getText(R.string.mmHg).toString()
         val sharedPref = SharedPreference(requireContext())
         model.liveCurrentData.observe(viewLifecycleOwner){
             val maxMinTemp = "${it.dayTemp}\u00B0C / ${it.nightTemp}\u00B0C"
             val currentTemp = if (it.currentTemp == ""){
                 maxMinTemp
             }else{
-                "Temperature: ${it.currentTemp}°C"
+                "${it.currentTemp}°C"
             }
             tvData.text = it.time
             imgWeather.load("https:" + it.imageUrl)
             tvCity.text = it.city
             tvCurrentTemp.text = currentTemp
             val press = if (sharedPref.getSet().pressure == "mm") {
-                "Pressure: ${ConvertWeatherParam().convertPress(it.pressure)}"
+                concat.concatenate(
+                    pressNameSt,
+                    convert.convertPress(it.pressure),
+                    mmHgSt
+                )
             }else{
-                "Pressure: ${it.pressure}"
+                concat.concatenate(
+                    pressNameSt,
+                    it.pressure,
+                    hPaSt
+                )
             }
-            tvPressure.text = press
-            val windDir = "Wind direction: ${it.wind_dir}"
-            tvWindDir.text = windDir
+            if (it.pressure.isEmpty()){
+                tvPressure.visibility = View.GONE
+            }else{
+                tvPressure.text = press
+            }
+            val windDir = concat.concatenate(windDirSt, it.wind_dir, "")
+            if (it.wind_dir.isEmpty()){
+                tvWindDir.visibility = View.GONE
+            }else{
+                tvWindDir.text = windDir
+                tvWindDir.visibility = View.VISIBLE
+            }
             val windSpeed = if (sharedPref.getSet().wind == "ms"){
-                "Wind speed: ${ConvertWeatherParam().convertWind(it.wind_kph)} ms"
+                concat.concatenate(windSpeedSt, convert.convertWind(it.wind_kph), msSt)
             }else{
-                "Wind speed: ${it.wind_kph} kph $text"
+                concat.concatenate(windSpeedSt, it.wind_kph, kmhSt)
             }
-            tvWindSpeed.text = windSpeed
+            if (it.wind_kph.isEmpty()){
+                tvWindSpeed.visibility = View.GONE
+            }else{
+                tvWindSpeed.text = windSpeed
+                tvWindSpeed.visibility = View.VISIBLE
+            }
             tvCondition.text = it.conditions
             tvMaxMin.text = if (it.currentTemp.isEmpty()){
                 ""
@@ -302,7 +333,6 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         _pLauncher = null
         fLocationClient = null
     }
-
 
     override fun onClickDialogButton(name: String?) {
     }

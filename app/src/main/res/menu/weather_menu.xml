@@ -12,17 +12,5 @@
         android:icon="@drawable/settings"
         app:showAsAction="ifRoom"
         android:id="@+id/itmSet"
-        >
-        <menu >
-            <item android:title="@string/wind_speed_in_km_h"
-                android:checkable="true"
-                android:id="@+id/wind"
-
-                />
-            <item android:title="@string/pressure_in_mm"
-                android:checkable="true"
-                android:id="@+id/press"
-                />
-        </menu>
-    </item>
+        />
 </menu>

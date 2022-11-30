@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Прогноз погоды</string>
+    <string name="search">Поиск</string>
+    <string name="refresh">Обновить</string>
+    <string name="settings">Настройки</string>
+    <string name="converter">Конвертер</string>
+    <string name="mm_hg">мм.рт.ст.</string>
+    <string name="translate_button">Перевести</string>
+    <string name="pressName">"Давление: "</string>
+    <string name="windDir">"Направление ветра: "</string>
+    <string name="windSpeed">"Скорость ветра: "</string>
+    <string name="kmh">км/ч</string>
+    <string name="ms">м/с</string>
+    <string name="hPa">гПа</string>
+    <string name="mmHg">мм.рт.ст.</string>
+    <string name="wind_speed_in_m_c">Ветер в м/с</string>
+    <string name="pressure_in_mm">Давление в мм.рт.ст.</string>
+</resources>
