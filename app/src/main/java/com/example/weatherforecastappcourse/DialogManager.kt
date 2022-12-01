@@ -2,8 +2,6 @@ package com.example.weatherforecastappcourse
 
 import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
-import android.widget.EditText
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -25,7 +23,6 @@ object DialogManager {
     fun searchByNameDialog(context: Context, listener: OnClickDialogButtonListener){
         val builder = AlertDialog.Builder(context)
         val dialog = builder.create()
-//        val edName = EditText(context)
         val textInputLayout = TextInputLayout(context)
         val edName = TextInputEditText(textInputLayout.context)
         dialog.setTitle("City name:")

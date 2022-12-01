@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:text="@string/translate_button"
+        android:backgroundTint="@color/cardview_bg"
         app:layout_constraintEnd_toEndOf="@+id/textEquals"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="@+id/textEquals"

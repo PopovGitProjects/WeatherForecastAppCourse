@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.placeholder, MainFragment.newInstance())
             .commit()
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.weather_menu, menu)
         return true
@@ -29,10 +30,9 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.placeholder, ConverterFragment.newInstance())
                     .addToBackStack("key")
                     .commit()
-                Toast.makeText(this, "Button click!", Toast.LENGTH_SHORT).show()
             }
             R.id.itmSet -> {
-                Toast.makeText(this, "Button click!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Button click!", Toast.LENGTH_SHORT).show()
             }
         }
         return true

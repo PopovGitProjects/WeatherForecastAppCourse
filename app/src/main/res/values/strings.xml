@@ -25,4 +25,8 @@
     <string name="ms">ms</string>
     <string name="hPa">hPa</string>
     <string name="mmHg">mmHg</string>
+
+    <string name="enable_location">Enable location?</string>
+    <string name="location_disabled">Location disabled, do you want enabled location?</string>
+    <string name="close">Close</string>
 </resources>

@@ -16,4 +16,7 @@
     <string name="mmHg">мм.рт.ст.</string>
     <string name="wind_speed_in_m_c">Ветер в м/с</string>
     <string name="pressure_in_mm">Давление в мм.рт.ст.</string>
+    <string name="enable_location">Включить местоположение?</string>
+    <string name="close">Закрыть</string>
+    <string name="location_disabled">Местоположение отключено, вы хотите включить местоположение?</string>
 </resources>
