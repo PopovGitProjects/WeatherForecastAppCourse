@@ -19,4 +19,5 @@
     <string name="enable_location">Включить местоположение?</string>
     <string name="close">Закрыть</string>
     <string name="location_disabled">Местоположение отключено, вы хотите включить местоположение?</string>
+    <string name="city_name">Название города</string>
 </resources>

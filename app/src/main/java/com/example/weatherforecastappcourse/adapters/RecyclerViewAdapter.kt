@@ -72,7 +72,7 @@ class RecyclerViewAdapter(
                 Const.HOUR -> {
                     val currentTemp = "${item.currentTemp}°C"
                     tvItemTemp.text = currentTemp
-                    if (sharedPref.getSet().pressure == "mm"){
+                    if (sharedPref.getSet().pressure == 1){
                         val press = concat.concatenate(
                             pressNameSt,
                             convert.convertPress(item.pressure),
@@ -83,7 +83,7 @@ class RecyclerViewAdapter(
                         tvItemPress.text = concat.concatenate(pressNameSt, item.pressure, hPaSt)
                     }
                     tvItemWindDir.text = concat.concatenate(windDirSt, item.wind_dir, "")
-                    if (sharedPref.getSet().wind == "mm"){
+                    if (sharedPref.getSet().wind == 1){
                         val wind = concat.concatenate(
                             windSpeedSt,
                             convert.convertPress(item.wind_kph),

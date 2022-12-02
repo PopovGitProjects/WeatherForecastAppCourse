@@ -171,7 +171,7 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
             imgWeather.load("https:" + it.imageUrl)
             tvCity.text = it.city
             tvCurrentTemp.text = currentTemp
-            val press = if (sharedPref.getSet().pressure == "mm") {
+            val press = if (sharedPref.getSet().pressure == 1 && it.pressure != "") {
                 concat.concatenate(
                     pressNameSt,
                     convert.convertPress(it.pressure),
@@ -196,7 +196,7 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
                 tvWindDir.text = windDir
                 tvWindDir.visibility = View.VISIBLE
             }
-            val windSpeed = if (sharedPref.getSet().wind == "ms"){
+            val windSpeed = if (sharedPref.getSet().wind == 1 && it.wind_kph != ""){
                 concat.concatenate(windSpeedSt, convert.convertWind(it.wind_kph), msSt)
             }else{
                 concat.concatenate(windSpeedSt, it.wind_kph, kmhSt)

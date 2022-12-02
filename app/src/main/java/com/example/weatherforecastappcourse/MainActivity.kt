@@ -3,7 +3,6 @@ package com.example.weatherforecastappcourse
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherforecastappcourse.fragments.MainFragment
 
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                     .commit()
             }
             R.id.itmSet -> {
-                Toast.makeText(this@MainActivity, "Button click!", Toast.LENGTH_SHORT).show()
+                DialogManager.setSettingsDialog(this)
             }
         }
         return true

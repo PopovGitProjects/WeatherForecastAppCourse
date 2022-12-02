@@ -8,7 +8,7 @@ class CalcPress {
         val pressure = editText.text.toString().toDouble()
         return decimalRound(pressure * constant).toString()
     }
-    private fun decimalRound(number: Double): Double{
+    fun decimalRound(number: Double): Double{
         var result = (number*10).roundToInt()
         val dd = number*10 - result
         if (dd >= 0.5){
