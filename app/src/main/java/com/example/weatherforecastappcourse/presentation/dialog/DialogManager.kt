@@ -1,10 +1,12 @@
-package com.example.weatherforecastappcourse
+package com.example.weatherforecastappcourse.presentation.dialog
 
 import android.app.AlertDialog
 import android.content.Context
+import com.example.weatherforecastappcourse.R
 import com.example.weatherforecastappcourse.domain.SharedPreference
 import com.example.weatherforecastappcourse.models.Settings
 import com.example.weatherforecastappcourse.models.SettingsParam
+import com.example.weatherforecastappcourse.presentation.interfaces.OnClickDialogButtonListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 

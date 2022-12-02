@@ -1,4 +1,4 @@
-package com.example.weatherforecastappcourse.models.viewmodels
+package com.example.weatherforecastappcourse.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

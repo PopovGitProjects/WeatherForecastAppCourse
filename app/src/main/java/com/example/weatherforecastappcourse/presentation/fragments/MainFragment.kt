@@ -1,4 +1,4 @@
-package com.example.weatherforecastappcourse.fragments
+package com.example.weatherforecastappcourse.presentation.fragments
 
 import android.Manifest
 import android.content.Context
@@ -21,14 +21,17 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.weatherforecastappcourse.*
-import com.example.weatherforecastappcourse.adapters.ViewPagerAdapter
+import com.example.weatherforecastappcourse.presentation.adapters.ViewPagerAdapter
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentMainBinding
 import com.example.weatherforecastappcourse.domain.Concat
 import com.example.weatherforecastappcourse.domain.ConvertWeatherParam
 import com.example.weatherforecastappcourse.domain.SharedPreference
 import com.example.weatherforecastappcourse.models.WeatherModel
-import com.example.weatherforecastappcourse.models.viewmodels.MainViewModel
+import com.example.weatherforecastappcourse.presentation.dialog.DialogManager
+import com.example.weatherforecastappcourse.presentation.interfaces.OnClickDialogButtonListener
+import com.example.weatherforecastappcourse.presentation.interfaces.TabLayoutSelectTab
+import com.example.weatherforecastappcourse.viewmodels.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -98,7 +101,8 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
             }
         }
         btnSearch.setOnClickListener {
-            DialogManager.searchByNameDialog(requireContext(), object : OnClickDialogButtonListener{
+            DialogManager.searchByNameDialog(requireContext(), object :
+                OnClickDialogButtonListener {
                 override fun onClickDialogButton(name: String?) {
                     if (name != null) {
                         requestWeatherData(name, requireContext())
@@ -117,7 +121,8 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         if (isLocationEnabled()){
             getLocation()
         }else{
-            DialogManager.locationSettingDialog(requireContext(), object : OnClickDialogButtonListener{
+            DialogManager.locationSettingDialog(requireContext(), object :
+                OnClickDialogButtonListener {
                 override fun onClickDialogButton(name: String?) {
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                 }

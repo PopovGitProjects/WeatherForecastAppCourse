@@ -1,10 +1,13 @@
-package com.example.weatherforecastappcourse
+package com.example.weatherforecastappcourse.presentation.activity
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.example.weatherforecastappcourse.fragments.MainFragment
+import com.example.weatherforecastappcourse.presentation.fragments.ConverterFragment
+import com.example.weatherforecastappcourse.presentation.dialog.DialogManager
+import com.example.weatherforecastappcourse.R
+import com.example.weatherforecastappcourse.presentation.fragments.MainFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

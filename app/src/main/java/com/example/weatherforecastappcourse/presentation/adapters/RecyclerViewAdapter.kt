@@ -1,4 +1,4 @@
-package com.example.weatherforecastappcourse.adapters
+package com.example.weatherforecastappcourse.presentation.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.weatherforecastappcourse.OnClickItemListener
+import com.example.weatherforecastappcourse.presentation.interfaces.OnClickItemListener
 import com.example.weatherforecastappcourse.R
-import com.example.weatherforecastappcourse.TabLayoutSelectTab
+import com.example.weatherforecastappcourse.presentation.interfaces.TabLayoutSelectTab
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.ForecastItemBinding
 import com.example.weatherforecastappcourse.domain.Concat
@@ -19,10 +19,10 @@ import com.example.weatherforecastappcourse.domain.SharedPreference
 import com.example.weatherforecastappcourse.models.WeatherModel
 
 class RecyclerViewAdapter(
-        private val itemListener: OnClickItemListener?,
-        private val tabLayoutListener: TabLayoutSelectTab?,
-        typeWeatherData: String,
-        context: Context
+    private val itemListener: OnClickItemListener?,
+    private val tabLayoutListener: TabLayoutSelectTab?,
+    typeWeatherData: String,
+    context: Context
     ) : ListAdapter<WeatherModel, RecyclerViewAdapter.Holder>(Comparator()) {
     private val aTypeWeatherData = typeWeatherData
     private val aContext = context
