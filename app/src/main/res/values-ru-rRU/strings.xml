@@ -5,7 +5,6 @@
     <string name="refresh">Обновить</string>
     <string name="settings">Настройки</string>
     <string name="converter">Конвертер</string>
-    <string name="mm_hg">мм.рт.ст.</string>
     <string name="translate_button">Перевести</string>
     <string name="pressName">"Давление: "</string>
     <string name="windDir">"Направление ветра: "</string>
