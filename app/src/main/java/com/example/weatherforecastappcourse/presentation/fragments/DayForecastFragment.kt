@@ -12,7 +12,7 @@ import com.example.weatherforecastappcourse.presentation.adapters.RecyclerViewAd
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentDayForecastBinding
 import com.example.weatherforecastappcourse.models.WeatherModel
-import com.example.weatherforecastappcourse.viewmodels.MainViewModel
+import com.example.weatherforecastappcourse.presentation.viewmodels.MainViewModel
 
 class DayForecastFragment : Fragment(), OnClickItemListener {
 
@@ -30,7 +30,7 @@ class DayForecastFragment : Fragment(), OnClickItemListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDayForecastBinding.inflate(inflater, container, false)
-        model.livesDayList.observe(viewLifecycleOwner){
+        model.livesDayList.observe(viewLifecycleOwner) {
             adapter?.submitList(it.subList(1, it.size))
         }
         return binding.root
@@ -41,7 +41,7 @@ class DayForecastFragment : Fragment(), OnClickItemListener {
         initRecyclerView()
     }
 
-    private fun initRecyclerView() = with(binding){
+    private fun initRecyclerView() = with(binding) {
         recyclerViewDay.layoutManager = LinearLayoutManager(activity)
         adapter = RecyclerViewAdapter(
             this@DayForecastFragment,

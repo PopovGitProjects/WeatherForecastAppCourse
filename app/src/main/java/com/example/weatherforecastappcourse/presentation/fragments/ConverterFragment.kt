@@ -29,35 +29,38 @@ class ConverterFragment : Fragment() {
         init()
     }
 
-    private fun init() = with(binding){
-            translateButton.setOnClickListener{
-                if (!editTextLeft.text.isNullOrEmpty() && editTextLeft.isFocused){
-                    editTextRight.setText(
-                        CalcPress()
-                        .calculatePressure(editTextLeft, Const.MMHG_CONST))
-                }
-                if (!editTextRight.text.isNullOrEmpty() && editTextRight.isFocused){
-                    editTextLeft.setText(
-                        CalcPress()
-                        .calculatePressure(editTextRight, Const.PA_CONST))
-                }
+    private fun init() = with(binding) {
+        translateButton.setOnClickListener {
+            if (!editTextLeft.text.isNullOrEmpty() && editTextLeft.isFocused) {
+                editTextRight.setText(
+                    CalcPress()
+                        .calculatePressure(editTextLeft, Const.MMHG_CONST)
+                )
             }
-            editTextLeft.addTextChangedListener {
-                if (editTextLeft.text.isNullOrEmpty() && editTextLeft.isFocused){
-                    editTextRight.setText("")
-                }
+            if (!editTextRight.text.isNullOrEmpty() && editTextRight.isFocused) {
+                editTextLeft.setText(
+                    CalcPress()
+                        .calculatePressure(editTextRight, Const.PA_CONST)
+                )
             }
-            editTextRight.addTextChangedListener {
-                if (editTextRight.text.isNullOrEmpty() && editTextRight.isFocused){
-                    editTextLeft.setText("")
-                }
+        }
+        editTextLeft.addTextChangedListener {
+            if (editTextLeft.text.isNullOrEmpty() && editTextLeft.isFocused) {
+                editTextRight.setText("")
             }
+        }
+        editTextRight.addTextChangedListener {
+            if (editTextRight.text.isNullOrEmpty() && editTextRight.isFocused) {
+                editTextLeft.setText("")
+            }
+        }
     }
 
     companion object {
         @JvmStatic
         fun newInstance() = ConverterFragment()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

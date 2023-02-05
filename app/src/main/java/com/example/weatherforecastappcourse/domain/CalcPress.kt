@@ -4,16 +4,17 @@ import android.widget.EditText
 import kotlin.math.roundToInt
 
 class CalcPress {
-    fun calculatePressure(editText: EditText, constant: Double):String{
+    fun calculatePressure(editText: EditText, constant: Double): String {
         val pressure = editText.text.toString().toDouble()
         return decimalRound(pressure * constant).toString()
     }
-    fun decimalRound(number: Double): Double{
-        var result = (number*10).roundToInt()
-        val dd = number*10 - result
-        if (dd >= 0.5){
+
+    fun decimalRound(number: Double): Double {
+        var result = (number * 10).roundToInt()
+        val dd = number * 10 - result
+        if (dd >= 0.5) {
             result += 1
         }
-        return result/ 10.0
+        return result / 10.0
     }
 }

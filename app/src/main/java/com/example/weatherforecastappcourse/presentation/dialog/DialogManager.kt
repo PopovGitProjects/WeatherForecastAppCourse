@@ -74,19 +74,19 @@ object DialogManager {
             dialog.dismiss()
         }
         dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok") { _, _ ->
-            if (checkedItem[0]){
+            if (checkedItem[0]) {
                 sharedPref.saveSet(Settings(pressure = 1, null))
                 sharedPref.saveSetParam(SettingsParam(pressParam = true, null))
-            }else {
+            } else {
                 sharedPref.saveSet(Settings(pressure = -1, null))
                 sharedPref.saveSetParam(SettingsParam(pressParam = false, null))
             }
-            if (checkedItem[1]){
+            if (checkedItem[1]) {
                 sharedPref.saveSet(Settings(pressure = null, wind = 1))
-                sharedPref.saveSetParam(SettingsParam(null,windParam = true))
-            }else {
+                sharedPref.saveSetParam(SettingsParam(null, windParam = true))
+            } else {
                 sharedPref.saveSet(Settings(pressure = null, wind = -1))
-                sharedPref.saveSetParam(SettingsParam(null,windParam = false))
+                sharedPref.saveSetParam(SettingsParam(null, windParam = false))
             }
             dialog.dismiss()
         }

@@ -11,7 +11,7 @@ import com.example.weatherforecastappcourse.presentation.adapters.RecyclerViewAd
 import com.example.weatherforecastappcourse.constants.Const
 import com.example.weatherforecastappcourse.databinding.FragmentHourForecastBinding
 import com.example.weatherforecastappcourse.models.WeatherModel
-import com.example.weatherforecastappcourse.viewmodels.MainViewModel
+import com.example.weatherforecastappcourse.presentation.viewmodels.MainViewModel
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -37,22 +37,22 @@ class HourForecastFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        model.liveCurrentData.observe(viewLifecycleOwner){
+        model.liveCurrentData.observe(viewLifecycleOwner) {
             adapter?.submitList(getHoursList(it))
 
         }
     }
 
-    private fun initRecyclerView() = with(binding){
+    private fun initRecyclerView() = with(binding) {
         recyclerViewHour.layoutManager = LinearLayoutManager(activity)
         adapter = RecyclerViewAdapter(null, null, Const.HOUR, requireContext())
         recyclerViewHour.adapter = adapter
     }
 
-    private fun getHoursList(weatherItem: WeatherModel): List<WeatherModel>{
+    private fun getHoursList(weatherItem: WeatherModel): List<WeatherModel> {
         val hoursArray = JSONArray(weatherItem.hoursForecast)
         val list = ArrayList<WeatherModel>()
-        for (i in 0 until hoursArray.length()){
+        for (i in 0 until hoursArray.length()) {
             val item = WeatherModel(
                 weatherItem.city,
                 (hoursArray[i] as JSONObject).getString("time"),

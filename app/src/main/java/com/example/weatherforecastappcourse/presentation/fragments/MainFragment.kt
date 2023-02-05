@@ -31,7 +31,7 @@ import com.example.weatherforecastappcourse.models.WeatherModel
 import com.example.weatherforecastappcourse.presentation.dialog.DialogManager
 import com.example.weatherforecastappcourse.presentation.interfaces.OnClickDialogButtonListener
 import com.example.weatherforecastappcourse.presentation.interfaces.TabLayoutSelectTab
-import com.example.weatherforecastappcourse.viewmodels.MainViewModel
+import com.example.weatherforecastappcourse.presentation.viewmodels.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -81,16 +81,16 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         buttonClick()
     }
 
-    private fun init() = with(binding){
+    private fun init() = with(binding) {
         val adapter = ViewPagerAdapter(activity as FragmentActivity, fragmentList)
         viewPager2.adapter = adapter
-        TabLayoutMediator(tabLayout, viewPager2){
-                tab, pos -> tab.text = fragmentTitleList[pos]
+        TabLayoutMediator(tabLayout, viewPager2) { tab, pos ->
+            tab.text = fragmentTitleList[pos]
 
         }.attach()
     }
 
-    private fun buttonClick() = with(binding){
+    private fun buttonClick() = with(binding) {
         btnRefresh.setOnClickListener {
             tabLayout.selectTab(tabLayout.getTabAt(0))
             refreshProgressBar.visibility = View.VISIBLE
@@ -112,15 +112,16 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         }
     }
 
-    private fun isLocationEnabled(): Boolean{
-        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private fun isLocationEnabled(): Boolean {
+        val locationManager =
+            activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
-    private fun checkLocation(){
-        if (isLocationEnabled()){
+    private fun checkLocation() {
+        if (isLocationEnabled()) {
             getLocation()
-        }else{
+        } else {
             DialogManager.locationSettingDialog(requireContext(), object :
                 OnClickDialogButtonListener {
                 override fun onClickDialogButton(name: String?) {
@@ -131,7 +132,7 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         }
     }
 
-    private fun getLocation(){
+    private fun getLocation() {
         val cancellationToken = CancellationTokenSource()
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -143,18 +144,22 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         ) {
             return
         }
-        fLocationClient?.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationToken.token)
+        fLocationClient?.getCurrentLocation(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            cancellationToken.token
+        )
             ?.addOnCompleteListener {
-                if (it.result.latitude.toString() != "" && it.result.longitude.toString() != ""){
-                    requestWeatherData("${it.result.latitude}, ${it.result.longitude}"
-                        , requireContext())
-                }else{
+                if (it.result.latitude.toString() != "" && it.result.longitude.toString() != "") {
+                    requestWeatherData(
+                        "${it.result.latitude}, ${it.result.longitude}", requireContext()
+                    )
+                } else {
                     requestWeatherData("Moscow", requireContext())
                 }
             }
     }
 
-    private fun updateCurrentCard() = with(binding){
+    private fun updateCurrentCard() = with(binding) {
         val concat = Concat()
         val convert = ConvertWeatherParam()
         val pressNameSt = resources.getText(R.string.pressName).toString()
@@ -165,11 +170,11 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         val hPaSt = resources.getText(R.string.hPa).toString()
         val mmHgSt = resources.getText(R.string.mmHg).toString()
         val sharedPref = SharedPreference(requireContext())
-        model.liveCurrentData.observe(viewLifecycleOwner){
+        model.liveCurrentData.observe(viewLifecycleOwner) {
             val maxMinTemp = "${it.dayTemp}\u00B0C / ${it.nightTemp}\u00B0C"
-            val currentTemp = if (it.currentTemp == ""){
+            val currentTemp = if (it.currentTemp == "") {
                 maxMinTemp
-            }else{
+            } else {
                 "${it.currentTemp}°C"
             }
             tvData.text = it.time
@@ -182,61 +187,61 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
                     convert.convertPress(it.pressure),
                     mmHgSt
                 )
-            }else{
+            } else {
                 concat.concatenate(
                     pressNameSt,
                     it.pressure,
                     hPaSt
                 )
             }
-            if (it.pressure.isEmpty()){
+            if (it.pressure.isEmpty()) {
                 tvPressure.visibility = View.GONE
-            }else{
+            } else {
                 tvPressure.text = press
             }
             val windDir = concat.concatenate(windDirSt, it.wind_dir, "")
-            if (it.wind_dir.isEmpty()){
+            if (it.wind_dir.isEmpty()) {
                 tvWindDir.visibility = View.GONE
-            }else{
+            } else {
                 tvWindDir.text = windDir
                 tvWindDir.visibility = View.VISIBLE
             }
-            val windSpeed = if (sharedPref.getSet().wind == 1 && it.wind_kph != ""){
+            val windSpeed = if (sharedPref.getSet().wind == 1 && it.wind_kph != "") {
                 concat.concatenate(windSpeedSt, convert.convertWind(it.wind_kph), msSt)
-            }else{
+            } else {
                 concat.concatenate(windSpeedSt, it.wind_kph, kmhSt)
             }
-            if (it.wind_kph.isEmpty()){
+            if (it.wind_kph.isEmpty()) {
                 tvWindSpeed.visibility = View.GONE
-            }else{
+            } else {
                 tvWindSpeed.text = windSpeed
                 tvWindSpeed.visibility = View.VISIBLE
             }
             tvCondition.text = it.conditions
-            tvMaxMin.text = if (it.currentTemp.isEmpty()){
+            tvMaxMin.text = if (it.currentTemp.isEmpty()) {
                 ""
-            }else{
+            } else {
                 maxMinTemp
             }
         }
         Log.d("My", "${model.liveCurrentData.value}")
     }
 
-    private fun permissionListener(){
-        _pLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+    private fun permissionListener() {
+        _pLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             Toast.makeText(activity, "Permission is $it", Toast.LENGTH_SHORT)
                 .show()
         }
     }
 
-    private fun checkPermission(){
-        if (!isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)){
+    private fun checkPermission() {
+        if (!isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
             permissionListener()
             pLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
 
-    private fun requestWeatherData(city: String, context: Context){
+    private fun requestWeatherData(city: String, context: Context) {
         val url = Const.API_URL +
                 Const.API_KEY +
                 "&q=" +
@@ -249,11 +254,10 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         val request = StringRequest(
             Request.Method.GET,
             url,
-            {
-                    response -> parseWeatherData(response)
+            { response ->
+                parseWeatherData(response)
             },
-            {
-                    error ->
+            { error ->
                 run {
                     Log.e("My", "Volley ERROR: $error")
                     Toast.makeText(context, "Weather data not received!", Toast.LENGTH_SHORT).show()
@@ -269,12 +273,12 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         parseCurrentWeatherData(mainObject, list[0])
     }
 
-    private fun parseDaysWeatherData(mainObject: JSONObject): List<WeatherModel>{
+    private fun parseDaysWeatherData(mainObject: JSONObject): List<WeatherModel> {
         val list = ArrayList<WeatherModel>()
         val name = mainObject.getJSONObject("location").getString("name")
         val daysForecastArray = mainObject.getJSONObject("forecast")
             .getJSONArray("forecastday")
-        for (i in 0 until daysForecastArray.length()){
+        for (i in 0 until daysForecastArray.length()) {
             val day = daysForecastArray[i] as JSONObject
             val item = WeatherModel(
                 name,
@@ -297,7 +301,7 @@ class MainFragment : Fragment(), OnClickDialogButtonListener, TabLayoutSelectTab
         return list
     }
 
-    private fun parseCurrentWeatherData(mainObject: JSONObject, weatherItem: WeatherModel){
+    private fun parseCurrentWeatherData(mainObject: JSONObject, weatherItem: WeatherModel) {
         val item = WeatherModel(
             mainObject.getJSONObject("location").getString("name"),
             mainObject.getJSONObject("current").getString("last_updated"),

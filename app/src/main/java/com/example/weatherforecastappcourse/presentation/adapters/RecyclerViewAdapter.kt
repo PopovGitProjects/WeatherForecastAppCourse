@@ -23,7 +23,7 @@ class RecyclerViewAdapter(
     private val tabLayoutListener: TabLayoutSelectTab?,
     typeWeatherData: String,
     context: Context
-    ) : ListAdapter<WeatherModel, RecyclerViewAdapter.Holder>(Comparator()) {
+) : ListAdapter<WeatherModel, RecyclerViewAdapter.Holder>(Comparator()) {
     private val aTypeWeatherData = typeWeatherData
     private val aContext = context
 
@@ -38,7 +38,7 @@ class RecyclerViewAdapter(
 
         init {
             itemView.setOnClickListener {
-                itemTemp?.let { it1 -> onClickItemListener?.onClickItem(it1)}
+                itemTemp?.let { it1 -> onClickItemListener?.onClickItem(it1) }
                 tabLayoutListener?.tabLayoutSelectTab()
             }
         }
@@ -65,32 +65,32 @@ class RecyclerViewAdapter(
                         "${item.dayTemp}°C / ${item.nightTemp}°C"
                     }
                     tvItemPress.text = item.pressure
-                    tvItemWindDir.visibility  = View.GONE
+                    tvItemWindDir.visibility = View.GONE
                     tvItemWindSpeed.visibility = View.GONE
                     imgItemWeather.load("https:" + item.imageUrl)
                 }
                 Const.HOUR -> {
                     val currentTemp = "${item.currentTemp}°C"
                     tvItemTemp.text = currentTemp
-                    if (sharedPref.getSet().pressure == 1){
+                    if (sharedPref.getSet().pressure == 1) {
                         val press = concat.concatenate(
                             pressNameSt,
                             convert.convertPress(item.pressure),
                             mmHgSt
                         )
                         tvItemPress.text = press
-                    }else{
+                    } else {
                         tvItemPress.text = concat.concatenate(pressNameSt, item.pressure, hPaSt)
                     }
                     tvItemWindDir.text = concat.concatenate(windDirSt, item.wind_dir, "")
-                    if (sharedPref.getSet().wind == 1){
+                    if (sharedPref.getSet().wind == 1) {
                         val wind = concat.concatenate(
                             windSpeedSt,
                             convert.convertPress(item.wind_kph),
                             msSt
                         )
                         tvItemWindSpeed.text = wind
-                    }else{
+                    } else {
                         tvItemWindSpeed.text = concat.concatenate(windSpeedSt, item.wind_kph, kmhSt)
                     }
                     imgItemWeather.load("https:" + item.imageUrl)
