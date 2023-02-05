@@ -37,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/mm_hg"
+            android:maxEms="4"
             android:inputType="numberDecimal"
             android:minWidth="120dp"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
@@ -48,8 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
         android:text="@string/equals"
+        android:textColor="#546E7A"
         android:textSize="24sp"
-        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -72,6 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/pa"
+            android:maxEms="4"
             android:inputType="numberDecimal"
             android:minWidth="120dp"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
